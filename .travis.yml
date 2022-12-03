@@ -7,7 +7,7 @@ before_install:
   - docker build -f ./client/Dockerfile.dev -t juanparblo/react-test-image  ./client
 
 script:
-  - docker run -e CI=false juanparblo/react-test-image npm run test -- -- coverage 
+  - docker run -e CI=false juanparblo/react-test-image npm test ## npm run test -- -- coverage 
   
 
 after_success:
@@ -16,7 +16,7 @@ after_success:
   - docker build -t juanparblo/multi-nginx    ./nginx
   - docker build -t juanparblo/multi-worker   ./worker
 
-  ## Log in to dockerhun via the cli
+  ## Log in to dockerhub via the cli
   - echo "$DOCKER_PASSWORD"  | docker login -u "$DOCKER_ID" --password-stdin
 
   ## push the docker images to docker hub (docker registry)
