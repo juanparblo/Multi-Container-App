@@ -7,7 +7,7 @@ before_install:
   - docker build -f ./client/Dockerfile.dev -t juanparblo/react-test-image  ./client
 
 script:
-  - docker run -e CI=true juanparblo/react-test-image npm run test -- -- coverage 
+  - docker run -e CI=false juanparblo/react-test-image npm run test -- -- coverage 
   
 
 after_success:
