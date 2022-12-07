@@ -21,19 +21,20 @@ script:
   
 
 after_success:
-  - docker build -t 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/multi-client   ./client
-  - docker build -t 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/multi-server   ./server
-  - docker build -t 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/multi-nginx    ./nginx
-  - docker build -t 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/multi-worker   ./worker
+  - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama
+  - docker build -t multi-container-pp-delama/multi-client   ./client
+  - docker build -t multi-container-pp-delama/multi-server   ./server
+  - docker build -t multi-container-pp-delama/multi-nginx    ./nginx
+  - docker build -t multi-container-pp-delama/multi-worker   ./worker
+
+  - docker tag multi-container-pp-delama:latest 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama:latest
 
   ## Log in to dockerhub via the cli if you want to host the images in dockerhub
   ## - echo "$DOCKER_PASSWORD"  | docker login -u "$DOCKER_ID" --password-stdin
 
-  #replace this with your account ID
-  - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama
 
   ## push the docker images to docker hub (docker registry)
-  - docker push 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/multi-client
+  - docker push 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama:latest
   - docker push 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/multi-server
   - docker push 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/multi-nginx
   - docker push 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/multi-worker 
