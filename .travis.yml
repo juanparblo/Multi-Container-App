@@ -21,7 +21,7 @@ script:
   
 
 after_success:
-  - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama
+  - eval $(aws ecr get-login-password --region us-east-1) # | docker login --username AWS --password-stdin 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama
   - docker build -t multi-container-pp-delama   ./client
   - docker build -t multi-container-pp-delama   ./server
   - docker build -t multi-container-pp-delama   ./nginx
