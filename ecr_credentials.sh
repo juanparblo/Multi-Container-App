@@ -7,3 +7,7 @@ cat > ~/.aws/credentials << EOL
 aws_access_key_id = ${AWS_ACCESS_KEY_ID}
 aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}
 EOL
+
+
+## Add this line to make script executable in pipeline
+## git update-index --add --chmod=+x build.sh
