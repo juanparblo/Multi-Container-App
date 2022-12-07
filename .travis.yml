@@ -1,29 +1,42 @@
-language: generic
+language: python
 sudo: required
+caches: pip ## might have to change the language to 'node_js' for this to work
 services: 
   - docker
+env:
+  global:
+  - region: 'us-east-1'                      ##- EB_REGION="us-east-1"
+  #- secure: secure_AWS_ACCOUNT_ID
+  - secure: secure_AWS_ACCESS_KEY_ID
+  - secure: secure_AWS_SECRET_ACCESS_KEY
+
 
 before_install:
-  - docker build -f ./client/Dockerfile.dev -t juanparblo/react-test-image  ./client
+  - pip install awscli
+  - export PATH=$PATH:$HOME/.local/bin
+  - docker build -f ./client/Dockerfile.dev -t 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/react-test-image  ./client
 
 script:
-  - docker run -e CI=true juanparblo/react-test-image npm test ## npm run test -- -- coverage 
+  - docker run -e CI=true 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/react-test-image npm test ## npm run test -- -- coverage 
   
 
 after_success:
-  - docker build -t juanparblo/multi-client   ./client
-  - docker build -t juanparblo/multi-server   ./server
-  - docker build -t juanparblo/multi-nginx    ./nginx
-  - docker build -t juanparblo/multi-worker   ./worker
+  - docker build -t 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/multi-client   ./client
+  - docker build -t 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/multi-server   ./server
+  - docker build -t 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/multi-nginx    ./nginx
+  - docker build -t 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/multi-worker   ./worker
 
-  ## Log in to dockerhub via the cli
-  - echo "$DOCKER_PASSWORD"  | docker login -u "$DOCKER_ID" --password-stdin
+  ## Log in to dockerhub via the cli if you want to host the images in dockerhub
+  ## - echo "$DOCKER_PASSWORD"  | docker login -u "$DOCKER_ID" --password-stdin
+
+  #replace this with your account ID
+  - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama
 
   ## push the docker images to docker hub (docker registry)
-  - docker push juanparblo/multi-client
-  - docker push juanparblo/multi-server
-  - docker push juanparblo/multi-nginx
-  - docker push juanparblo/multi-worker 
+  - docker push 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/multi-client
+  - docker push 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/multi-server
+  - docker push 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/multi-nginx
+  - docker push 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/multi-worker 
 
 #deploy:
 # on:
