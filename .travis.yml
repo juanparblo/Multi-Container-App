@@ -13,8 +13,7 @@ env:
 
 before_install:
   - pip install awscli
-  - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-  - aws configure set aws_secret_access_key $AWS_SECRET-ACCESS_KEY
+  - ./ecr_credentials.sh
   - export PATH=$PATH:$HOME/.local/bin
   - docker build -f ./client/Dockerfile.dev -t 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/react-test-image  ./client
 
