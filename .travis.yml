@@ -12,10 +12,11 @@ env:
 
 
 before_install:
-  - pip install awscli
+  - pip install -- user awscli    
   #- chmod +x ecr_credentials.sh
-  - ./ecr_credentials.sh
+  #- ./ecr_credentials.sh
   - export PATH=$PATH:$HOME/.local/bin
+  - $(aws ecr get-login --no-include-email --region us-east-1)
   - docker build -f ./client/Dockerfile.dev -t 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama/react-test-image  ./client
 
 script:
@@ -24,13 +25,13 @@ script:
 
 after_success:
  # - eval $(aws ecr get-login-password --region us-east-1) # | docker login --username AWS --password-stdin 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama
-  - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama
+  #- aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama
   - docker build -t multi-container-pp-delama   ./client
   - docker build -t multi-container-pp-delama   ./server
   - docker build -t multi-container-pp-delama   ./nginx
   - docker build -t multi-container-pp-delama   ./worker
 
-  - docker tag multi-container-pp-delama:latest 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama:2.1
+  - docker tag multi-container-pp-delama:2.1 236642024133.dkr.ecr.us-east-1.amazonaws.com/multi-container-pp-delama:2.1
 
   ## Log in to dockerhub via the cli if you want to host the images in dockerhub
   ## - echo "$DOCKER_PASSWORD"  | docker login -u "$DOCKER_ID" --password-stdin
