@@ -12,7 +12,7 @@ env:
 
 
 before_install:
-  - pip install -- user awscli    
+  - pip install awscli    
   #- chmod +x ecr_credentials.sh
   #- ./ecr_credentials.sh
   - export PATH=$PATH:$HOME/.local/bin
